@@ -5,6 +5,8 @@
 ![React Badge](https://img.shields.io/badge/Next.js-14-black)
 ![Hackathon](https://img.shields.io/badge/Midnight-BUIDL%20Battle-orange)
 
+![ZKWHALE Terminal Demo](./public/demo.webp)
+
 **Where whales trade privately, prove performance publicly, and monetize alpha without doxxing.**
 
 ---
