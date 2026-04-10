@@ -1,5 +1,5 @@
 import React from 'react';
-import { DEMO_MODE } from '../lib/demo-mode';
+import { DEMO_MODE } from '../lib/midnight';
 
 export const DemoBanner: React.FC = () => {
   if (!DEMO_MODE) return null;

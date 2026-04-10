@@ -13,7 +13,7 @@ interface LeaderboardEntry {
   isLive?: boolean;
 }
 
-import { DEMO_MODE, DEMO_CONFIG } from '../lib/demo-mode';
+import { DEMO_MODE } from '../lib/midnight';
 
 const defaultData: LeaderboardEntry[] = [
   { id: '1', vibeId: 'vibe_0x7f3a...4e2d', performance: '+42.8%', followers: 342, strategy: 'HIDDEN', isLive: true },
@@ -23,16 +23,6 @@ const defaultData: LeaderboardEntry[] = [
 ];
 
 const getLeaderboardData = (): LeaderboardEntry[] => {
-  if (DEMO_MODE && DEMO_CONFIG.leaderboard) {
-    return DEMO_CONFIG.leaderboard.map(item => ({
-      id: String(item.rank),
-      vibeId: item.vibeId,
-      performance: item.performance,
-      followers: item.followers,
-      strategy: item.strategy,
-      isLive: item.rank % 2 !== 0 // fake active indicator
-    }));
-  }
   return defaultData;
 };
 
