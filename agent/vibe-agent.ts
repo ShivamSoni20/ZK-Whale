@@ -26,7 +26,7 @@ const client = process.env.LLM_API_KEY ? new OpenAI({
 
 const DEFAULT_MODEL = process.env.LLM_MODEL || 'meta-llama/Llama-3.1-405B-Instruct-Turbo';
 
-import { DEMO_MODE } from '../lib/demo-mode';
+import { DEMO_MODE } from '../lib/midnight';
 import { mockParseVibe, mockVerifyFidelity, mockGenerateSwarmCommitment } from './mock-agent';
 
 /**

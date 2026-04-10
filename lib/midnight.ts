@@ -8,7 +8,7 @@ import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-pri
 
 type ContractInstance = any;
 
-const DEMO_MODE = true; // Toggle to false when connected to live Preprod node
+export const DEMO_MODE = true; // Toggle to false when connected to live Preprod node
 
 const CONFIG = {
   NODE_URL: process.env.NEXT_PUBLIC_NODE_URL || 'https://rpc.preprod.midnight.network',

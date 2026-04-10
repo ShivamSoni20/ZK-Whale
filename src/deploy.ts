@@ -9,9 +9,10 @@ import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client
 import { midnightProvider } from '@midnight-ntwrk/midnight-js-node-provider';
 import { createMidnightWalletProvider } from '@midnight-ntwrk/midnight-js-wallet';
 
-// @ts-ignore
-import { contract, ledger } from '../contracts/managed/vibe-trader'; 
-
+// @ts-ignore - The following artifacts are generated locally by the Compact compiler (npm run compile-contract)
+// import { contract, ledger } from '../contracts/managed/vibe-trader'; 
+const contract = {} as any; // Placeholder for compilation
+const ledger = {} as any;   // Placeholder for compilation
 const DEPLOYMENT_FILE = path.join(__dirname, '../deployment.json');
 
 const rl = readline.createInterface({

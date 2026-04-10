@@ -23,7 +23,6 @@ import {
 
 import { parseVibe } from '../agent/vibe-agent';
 import { submitVibePro, executeTradePro, discloseDetails, initializeMidnight } from '../lib/midnight';
-import { DEMO_MODE, DEMO_CONFIG } from '../lib/demo-mode';
 
 export interface Message {
   id: number;
