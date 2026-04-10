@@ -1,0 +1,44 @@
+{
+  "name": "vibe-trading-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "compile-contract": "compact compile contracts/src/vibe-trader.compact --output contracts/compiled",
+    "deploy": "tsx scripts/deploy.ts",
+    "deploy-local": "midnight-js deploy --contract contracts/compiled/vibe-trader.json --network local",
+    "test-flow": "tsx agent/vibe-agent.ts && echo 'Flow Test Success'",
+    "agent": "tsx agent/vibe-agent.ts"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/midnight-js-contracts": "latest",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "latest",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "latest",
+    "clsx": "^2.1.1",
+    "dotenv": "^16.0.0",
+    "effect": "^3.21.0",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.8.0",
+    "next": "14.2.0",
+    "openai": "^4.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  }
+}
