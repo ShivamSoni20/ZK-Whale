@@ -12,7 +12,7 @@ export const Navbar: React.FC = () => {
             <Zap size={20} fill="currentColor" />
           </div>
           <div className="flex flex-col leading-none">
-            <span className="text-lg font-black tracking-tighter text-text-primary">Vibe Trading <span className="text-cyan">Pro</span></span>
+            <span className="text-lg font-black tracking-tighter text-text-primary">ZK<span className="text-cyan">WHALE</span></span>
             <span className="text-[9px] uppercase tracking-[0.3em] text-text-secondary/60 font-bold">Midnight Network</span>
           </div>
         </Link>

@@ -45,7 +45,7 @@ export default function Dashboard() {
     { 
       id: 1, 
       type: 'ai', 
-      content: 'Terminal initialized. Connected to Midnight testnet. Ready for your vibes.',
+      content: 'Terminal initialized. Connected to Midnight testnet. Ready for your commands.',
       timestamp: '09:41'
     }
   ]);
@@ -53,7 +53,7 @@ export default function Dashboard() {
 
   // Mock steps for ZK visualizer
   const [proofSteps, setProofSteps] = useState<ProofStep[]>([
-    { id: 1, label: 'Parsing Vibe...', status: 'pending', icon: <MessageSquare size={14}/> },
+    { id: 1, label: 'Parsing Intent...', status: 'pending', icon: <MessageSquare size={14}/> },
     { id: 2, label: 'Generating Commitment...', status: 'pending', icon: <Lock size={14}/> },
     { id: 3, label: 'Running ZK Circuit...', status: 'pending', icon: <Cpu size={14}/> },
     { id: 4, label: 'Proof Ready!', status: 'pending', icon: <ShieldCheck size={14}/> },
@@ -83,7 +83,7 @@ export default function Dashboard() {
       const aiResponse: Message = { 
         id: Date.now() + 1, 
         type: 'ai', 
-        content: '🤖 Analyzing your vibe...\n✓ Asset detected: ' + intentArray.asset + '\n✓ Direction: ' + intentArray.direction + '\n✓ Risk level: ' + intentArray.riskLevel + '\n✓ Confidence score: ' + intentArray.confidence + '%',
+        content: '🤖 Analyzing your strategy...\n✓ Asset detected: ' + intentArray.asset + '\n✓ Direction: ' + intentArray.direction + '\n✓ Risk level: ' + intentArray.riskLevel + '\n✓ Confidence score: ' + intentArray.confidence + '%',
         json: intentArray,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
@@ -108,7 +108,7 @@ export default function Dashboard() {
 
     } catch (err) {
       console.error(err);
-      setMessages(prev => [...prev, { id: Date.now(), type: 'ai', content: 'An error occurred while processing the vibe.', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+      setMessages(prev => [...prev, { id: Date.now(), type: 'ai', content: 'An error occurred while processing the strategy.', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
     } finally {
       setIsProcessing(false);
     }
@@ -132,7 +132,7 @@ export default function Dashboard() {
             <div className="glass-card rounded-2xl p-5 flex flex-col gap-4">
               <h4 className="text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] flex items-center gap-2">
                 <History size={14} className="text-cyan/60" />
-                Active Vibe IDs
+                Active Strategy IDs
               </h4>
               <div className="flex flex-col gap-2">
                 {['vibe_0x7f3a...', 'vibe_0x9a1b...', 'vibe_0x4d8e...'].map((id) => (
@@ -173,7 +173,7 @@ export default function Dashboard() {
                <div className="h-12 border-b border-border/40 flex items-center justify-between px-6 bg-card-elevated/40 backdrop-blur-md">
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-cyan animate-pulse shadow-[0_0_8px_rgba(0,212,255,1)]" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary">Vibe Terminal <span className="text-cyan/60 ml-1">v.1.0-beta</span></span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary">ZKWHALE Terminal <span className="text-cyan/60 ml-1">v.1.0-beta</span></span>
                   </div>
                   <div className="flex items-center gap-4">
                     <span className="text-[10px] text-text-secondary font-mono">ID: 0x8f2...3d9e</span>

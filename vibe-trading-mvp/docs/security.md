@@ -1,4 +1,4 @@
-# Security Audit Checklist: Vibe Trading Pro
+# Security Audit Checklist: ZKWHALE
 
 To ensure the highest standards of privacy and fairness in the Midnight ecosystem, the following security patterns have been implemented:
 

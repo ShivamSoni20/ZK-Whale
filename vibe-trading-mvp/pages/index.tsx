@@ -32,7 +32,7 @@ export default function Home() {
               </div>
               
               <h1 className="text-6xl md:text-8xl font-black leading-tight tracking-tighter">
-                Trade with <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-purple to-success">Vibes.</span><br />
+                Trade with <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan via-purple to-success">ZKWHALE.</span><br />
                 Stay <span className="italic">Anonymous.</span>
               </h1>
               
@@ -88,7 +88,7 @@ export default function Home() {
                     <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
                     <div className="w-2.5 h-2.5 rounded-full bg-green-500/40" />
                   </div>
-                  <div className="mx-auto text-[9px] font-black text-text-secondary/40 uppercase tracking-widest">vibe-terminal-v1.0</div>
+                  <div className="mx-auto text-[9px] font-black text-text-secondary/40 uppercase tracking-widest">zkwhale-terminal-v1.0</div>
                 </div>
                 <div className="p-8 aspect-video bg-[#05080F] flex flex-col justify-center gap-4">
                   <div className="flex gap-3">
@@ -116,7 +116,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto flex flex-col gap-16 relative z-10">
             <div className="flex flex-col items-center text-center gap-4">
                <span className="text-[10px] font-black text-cyan uppercase tracking-[0.4em]">Simple Yet Private</span>
-               <h2 className="text-4xl md:text-5xl font-black tracking-tighter">Your Vibe, Our Proof.</h2>
+               <h2 className="text-4xl md:text-5xl font-black tracking-tighter">Your Strategy, Our Proof.</h2>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
@@ -130,7 +130,7 @@ export default function Home() {
                 },
                 { 
                   step: "02", 
-                  title: "AI Parses Your Vibe", 
+                  title: "AI Parses Your Intent", 
                   desc: "Llama 3.1 converts it to a structured private intent stored securely on Midnight.",
                   icon: Cpu,
                   color: "purple"
@@ -138,7 +138,7 @@ export default function Home() {
                 { 
                   step: "03", 
                   title: "ZK Proof of Fairness", 
-                  desc: "Trade executes privately. A ZK proof proves you followed your own vibe — no doxxing, no front-running.",
+                  desc: "Trade executes privately. A ZK proof proves you followed your own strategy — no doxxing, no front-running.",
                   icon: Shield,
                   color: "success"
                 }
@@ -189,7 +189,7 @@ export default function Home() {
                  <div className="absolute inset-0 bg-gradient-to-br from-cyan/10 to-transparent pointer-events-none" />
                  <h4 className="text-xs font-black text-success uppercase tracking-widest mb-8 flex items-center gap-2 relative z-10">
                   <CircleCheck size={16} />
-                  With Vibe Trading Pro
+                  With ZKWHALE
                 </h4>
                 <div className="space-y-6 relative z-10">
                   {['Zero-Knowledge hidden assets', 'Encrypted private intent', 'MEV protected execution', 'ZK-Proven performance'].map(text => (

@@ -7,7 +7,7 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-black tracking-tighter text-text-primary">Vibe Trading <span className="text-cyan">Pro</span></span>
+            <span className="text-sm font-black tracking-tighter text-text-primary">ZK<span className="text-cyan">WHALE</span></span>
           </div>
           <p className="text-[10px] text-text-secondary max-w-xs leading-relaxed uppercase tracking-widest font-bold opacity-60">
             ZK-Sovereign natural language trading. Your strategy, your privacy.
@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/5 flex justify-between items-center">
-        <span className="text-[9px] text-text-secondary font-mono">© 2025 VIBE TRADING PRO. ETH GLOBAL WINNER TYPE BEAT.</span>
+        <span className="text-[9px] text-text-secondary font-mono">© 2026 ZKWHALE. MIDNIGHT NETWORK HACKATHON.</span>
         <span className="text-[9px] text-text-secondary font-mono uppercase tracking-[0.3em] font-bold">Rational Privacy for DeFi</span>
       </div>
     </footer>

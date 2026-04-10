@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Vibe Trading Pro | ZK-Powered AI Terminal</title>
+        <title>ZKWHALE | ZK-Powered AI Trading Terminal</title>
         <meta name="description" content="The world's first ZK-powered natural language trading terminal on Midnight Network." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
