@@ -13,12 +13,30 @@ interface LeaderboardEntry {
   isLive?: boolean;
 }
 
-const leaderboardData: LeaderboardEntry[] = [
+import { DEMO_MODE, DEMO_CONFIG } from '../lib/demo-mode';
+
+const defaultData: LeaderboardEntry[] = [
   { id: '1', vibeId: 'vibe_0x7f3a...4e2d', performance: '+42.8%', followers: 342, strategy: 'HIDDEN', isLive: true },
   { id: '2', vibeId: 'vibe_0x9a1b...2c5f', performance: '+28.4%', followers: 184, strategy: 'HIDDEN' },
   { id: '3', vibeId: 'vibe_0x4d8e...9f1a', performance: '+18.1%', followers: 92, strategy: 'HIDDEN', isLive: true },
   { id: '4', vibeId: 'vibe_0xbc2a...6d4e', performance: '+12.5%', followers: 45, strategy: 'HIDDEN' },
 ];
+
+const getLeaderboardData = (): LeaderboardEntry[] => {
+  if (DEMO_MODE && DEMO_CONFIG.leaderboard) {
+    return DEMO_CONFIG.leaderboard.map(item => ({
+      id: String(item.rank),
+      vibeId: item.vibeId,
+      performance: item.performance,
+      followers: item.followers,
+      strategy: item.strategy,
+      isLive: item.rank % 2 !== 0 // fake active indicator
+    }));
+  }
+  return defaultData;
+};
+
+const leaderboardData = getLeaderboardData();
 
 export const VibeLeaderboard: React.FC = () => {
   return (
@@ -73,7 +91,7 @@ export const VibeLeaderboard: React.FC = () => {
                       </div>
                       <div className="flex flex-col">
                         <span className="font-bold text-text-primary group-hover:text-cyan transition-colors">Anonymous</span>
-                        <span className="text-[9px] text-text-secondary/60 font-mono">#{entry.id * 1024}</span>
+                        <span className="text-[9px] text-text-secondary/60 font-mono">#{Number(entry.id) * 1024}</span>
                       </div>
                     </div>
                   </td>

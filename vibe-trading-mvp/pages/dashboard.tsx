@@ -21,8 +21,27 @@ import {
   Cpu
 } from 'lucide-react';
 
+import { parseVibe } from '../agent/vibe-agent';
+import { submitVibePro, executeTradePro, discloseDetails, initializeMidnight } from '../lib/midnight';
+import { DEMO_MODE, DEMO_CONFIG } from '../lib/demo-mode';
+
+export interface Message {
+  id: number;
+  type: 'user' | 'ai';
+  content: string;
+  timestamp: string;
+  json?: any;
+}
+
+export interface ProofStep {
+  id: number;
+  label: string;
+  status: 'pending' | 'loading' | 'completed';
+  icon: React.ReactNode;
+}
+
 export default function Dashboard() {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     { 
       id: 1, 
       type: 'ai', 
@@ -33,37 +52,66 @@ export default function Dashboard() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Mock steps for ZK visualizer
-  const [proofSteps, setProofSteps] = useState([
-    { id: 1, label: 'Parsing Vibe...', status: 'completed', icon: <MessageSquare size={14}/> },
-    { id: 2, label: 'Generating Commitment...', status: 'completed', icon: <Lock size={14}/> },
-    { id: 3, label: 'Running ZK Circuit...', status: 'completed', icon: <Cpu size={14}/> },
-    { id: 4, label: 'Proof Ready!', status: 'completed', icon: <ShieldCheck size={14}/> },
+  const [proofSteps, setProofSteps] = useState<ProofStep[]>([
+    { id: 1, label: 'Parsing Vibe...', status: 'pending', icon: <MessageSquare size={14}/> },
+    { id: 2, label: 'Generating Commitment...', status: 'pending', icon: <Lock size={14}/> },
+    { id: 3, label: 'Running ZK Circuit...', status: 'pending', icon: <Cpu size={14}/> },
+    { id: 4, label: 'Proof Ready!', status: 'pending', icon: <ShieldCheck size={14}/> },
   ]);
 
-  const handleSendVibe = (vibe: string) => {
-    const newUserMsg = { id: Date.now(), type: 'user', content: vibe, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
+  const [activeProofHash, setActiveProofHash] = useState<string>('');
+
+  const updateProofStep = (stepId: number, status: ProofStep['status']) => {
+    setProofSteps(prev => prev.map(s => s.id === stepId ? { ...s, status } : s));
+  };
+
+  const handleSendVibe = async (vibe: string) => {
+    const newUserMsg: Message = { id: Date.now(), type: 'user', content: vibe, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
     setMessages(prev => [...prev, newUserMsg]);
-    
     setIsProcessing(true);
-    // Simulate AI response
-    setTimeout(() => {
-      const aiResponse = { 
+    
+    // Reset steps
+    setProofSteps(prev => prev.map(s => ({ ...s, status: 'pending' })));
+    setActiveProofHash('');
+
+    try {
+      // Step 1: AI Parsing
+      updateProofStep(1, 'loading');
+      const intentArray: any = await parseVibe(vibe);
+      updateProofStep(1, 'completed');
+      
+      const aiResponse: Message = { 
         id: Date.now() + 1, 
         type: 'ai', 
-        content: 'I have parsed your intent. Generating a ZK proof of fairness now. This trade will execute privately via Midnight.',
-        json: {
-          action: "LONG",
-          asset: "SOL/USD",
-          trigger: 140.00,
-          take_profit: 165.00,
-          stop_loss: 130.00,
-          midnight_vibe_hash: "0x7f3a...4e2d"
-        },
+        content: '🤖 Analyzing your vibe...\n✓ Asset detected: ' + intentArray.asset + '\n✓ Direction: ' + intentArray.direction + '\n✓ Risk level: ' + intentArray.riskLevel + '\n✓ Confidence score: ' + intentArray.confidence + '%',
+        json: intentArray,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, aiResponse]);
+
+      // Step 2: ZK Commitment
+      updateProofStep(2, 'loading');
+      const contractMock = {};
+      const submitRes = await submitVibePro(contractMock, "vibe_demo", new Uint8Array(), new Uint8Array(), new Uint8Array());
+      updateProofStep(2, 'completed');
+
+      // Step 3: Trade Execution
+      updateProofStep(3, 'loading');
+      const execRes = await executeTradePro(contractMock, "vibe_demo", new Uint8Array(), intentArray.confidence || 90, new Uint8Array());
+      updateProofStep(3, 'completed');
+
+      // Step 4: Proof Generation
+      updateProofStep(4, 'loading');
+      const proofRes = await discloseDetails(contractMock, "vibe_demo", new Uint8Array(), "system", "SOL", "LONG");
+      updateProofStep(4, 'completed');
+      setActiveProofHash((proofRes as any)?.proofHash || "0x8f3a...9c2d");
+
+    } catch (err) {
+      console.error(err);
+      setMessages(prev => [...prev, { id: Date.now(), type: 'ai', content: 'An error occurred while processing the vibe.', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+    } finally {
       setIsProcessing(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -203,8 +251,8 @@ export default function Dashboard() {
           <div className="lg:col-span-3 flex flex-col gap-6">
             <ProofVisualizer 
               steps={proofSteps} 
-              latestProof="0x7f3a9e1b...d92c7f4e8b1a0302"
-              fidelityScore={98.3}
+              latestProof={activeProofHash || undefined}
+              fidelityScore={activeProofHash ? 98.3 : undefined}
             />
 
             <DisclosureTierSelector />

@@ -19,12 +19,15 @@ const TradeIntentSchema = z.object({
 
 type TradeIntent = z.infer<typeof TradeIntentSchema>;
 
-const client = new OpenAI({
+const client = process.env.LLM_API_KEY ? new OpenAI({
   apiKey: process.env.LLM_API_KEY,
   baseURL: process.env.LLM_BASE_URL || 'https://api.aimlapi.com/v1',
-});
+}) : null;
 
 const DEFAULT_MODEL = process.env.LLM_MODEL || 'meta-llama/Llama-3.1-405B-Instruct-Turbo';
+
+import { DEMO_MODE } from '../lib/demo-mode';
+import { mockParseVibe, mockVerifyFidelity, mockGenerateSwarmCommitment } from './mock-agent';
 
 /**
  * Enhanced Vibe Parser with Retry & Zod Validation
@@ -32,9 +35,13 @@ const DEFAULT_MODEL = process.env.LLM_MODEL || 'meta-llama/Llama-3.1-405B-Instru
 export async function parseVibe(userInput: string, retries = 3): Promise<TradeIntent> {
   console.log(`[Agent] Parsing: "${userInput}"`);
   
+  if (DEMO_MODE || !process.env.LLM_API_KEY) {
+    return (await mockParseVibe(userInput)) as unknown as TradeIntent;
+  }
+  
   for (let i = 0; i < retries; i++) {
     try {
-      const response = await client.chat.completions.create({
+      const response = await client!.chat.completions.create({
         model: DEFAULT_MODEL,
         messages: [{ role: "system", content: "You are a Quant-grade Trading Agent. Output JSON only." }, { role: "user", content: vibeParsingPrompt(userInput) }],
         response_format: { type: "json_object" },
@@ -56,7 +63,11 @@ export async function parseVibe(userInput: string, retries = 3): Promise<TradeIn
 export async function verifyFidelity(vibe: string, intent: TradeIntent) {
   console.log(`[Agent] Verifying fidelity for ZK proof...`);
   
-  const response = await client.chat.completions.create({
+  if (DEMO_MODE || !process.env.LLM_API_KEY) {
+    return await mockVerifyFidelity(vibe, intent);
+  }
+  
+  const response = await client!.chat.completions.create({
     model: DEFAULT_MODEL,
     messages: [{ role: "user", content: fidelityCheckPrompt(vibe, intent) }],
     response_format: { type: "json_object" },
@@ -70,6 +81,9 @@ export async function verifyFidelity(vibe: string, intent: TradeIntent) {
  * Simulates hashing multiple trader signatures/inputs
  */
 export async function generateSwarmCommitment(traderKeys: string[], baseStrategy: string) {
+  if (DEMO_MODE || !process.env.LLM_API_KEY) {
+    return await mockGenerateSwarmCommitment(traderKeys, baseStrategy);
+  }
   // In a real ZK app, this would be a Merkle root or complex hash chain
   const encoder = new TextEncoder();
   const data = encoder.encode(traderKeys.join('') + baseStrategy);
