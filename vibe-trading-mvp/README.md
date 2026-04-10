@@ -15,7 +15,7 @@ The current DeFi trading landscape punishes success. If you're a profitable on-c
 
 ## 💡 The Solution
 
-**ZKWHALE** eliminates this tradeoff using Midnight Network's zero-knowledge smart contracts. Traders type strategies in natural language. An AI agent (Llama 3.1 405B) parses the intent into a structured execution plan. The trade executes privately through a Compact smart contract that generates a **ZK Fidelity Proof** — cryptographic evidence that the trader followed their own strategy without revealing position size, entry price, or timing. Verified performance is published to a public leaderboard. Subscribers pay for tiered selective disclosure of trade signals — asset only, asset + direction, or full intent hash for automated copy execution.
+**ZKWHALE** eliminates this tradeoff using Midnight Network's zero-knowledge smart contracts. Traders type strategies in natural language. An AI agent (Llama 3.1 405B) parses the intent into a structured execution plan. The trade executes privately through a Compact smart contract that generates a **ZK Fidelity Proof** — cryptographic evidence that the trader followed their own strategy without revealing position size, entry price, or timing. Verified performance is published to a public leaderboard. Subscribers pay for tiered selective disclosure of trade signals.
 
 **Human trust required: 0. Math does the verification.**
 
@@ -24,121 +24,107 @@ The current DeFi trading landscape punishes success. If you're a profitable on-c
 ## 🏗️ System Architecture
 
 ```
-User ──▶ Natural Language ──▶ AI Agent (Llama 3.1 405B)
-                                    │
-                                    ▼
-                            Structured Intent
-                                    │
-                                    ▼
-                    ┌───────────────────────────────┐
-                    │  Midnight Smart Contract       │
-                    │  (Compact v0.30.0)             │
-                    │                               │
-                    │  submitVibe()     ──▶ Private  │
-                    │  executeTrade()   ──▶ ZK Proof │
-                    │  proveFairness() ──▶ Disclose  │
-                    │  provePerformance() ──▶ Public │
-                    └───────────────────────────────┘
-                                    │
-                          ┌─────────┴─────────┐
-                          ▼                   ▼
-                   ZK Fidelity Proof    Selective Disclosure
-                   (Public Ledger)      (Tiered Subscribers)
+┌──────────────────────────────────────────────────────────────────┐
+│                         ZKWHALE                                  │
+│                                                                  │
+│   User ──▶ "Buy SOL under $140"                                  │
+│              │                                                   │
+│              ▼                                                   │
+│   ┌─────────────────────┐                                        │
+│   │   AI Agent           │  Llama 3.1 405B                       │
+│   │   agent/vibe-agent   │  Parses natural language → Intent     │
+│   └──────────┬──────────┘                                        │
+│              │                                                   │
+│              ▼                                                   │
+│   ┌─────────────────────────────────────────────┐                │
+│   │   Midnight Smart Contract (Compact v0.30)    │                │
+│   │   contracts/src/vibe-trader.compact          │                │
+│   │                                              │                │
+│   │   ┌─────────────┐  ┌──────────────────┐     │                │
+│   │   │ submitVibe   │  │ executeTrade     │     │                │
+│   │   │ (private)    │  │ (ZK fidelity)    │     │                │
+│   │   └─────────────┘  └──────────────────┘     │                │
+│   │   ┌─────────────┐  ┌──────────────────┐     │                │
+│   │   │ proveFairness│  │ provePerformance │     │                │
+│   │   │ (disclose)   │  │ (public score)   │     │                │
+│   │   └─────────────┘  └──────────────────┘     │                │
+│   └─────────────────────────────────────────────┘                │
+│              │                          │                         │
+│              ▼                          ▼                         │
+│   ┌──────────────────┐    ┌──────────────────────┐               │
+│   │ ZK Fidelity Proof │    │ Selective Disclosure  │               │
+│   │ (Public Ledger)   │    │ (Tiered Subscribers)  │               │
+│   └──────────────────┘    └──────────────────────┘               │
+│                                                                  │
+│   Infrastructure:                                                │
+│   ┌────────────┐ ┌────────────┐ ┌────────────────┐              │
+│   │ Node :9944 │ │Index :8088 │ │Proof Srv :6300 │              │
+│   └────────────┘ └────────────┘ └────────────────┘              │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 💎 Key Features & Innovation
+## 💎 Key Features
 
-- **Zero-Knowledge Fidelity Proofs:** Every trade generates a cryptographic proof that the execution matched the original strategy. No trust required — the math proves fairness.
-- **Selective Disclosure Engine:** Whale traders monetize their alpha through tiered access. Tier 1 reveals the asset. Tier 2 adds direction. Tier 3 exposes the full intent hash for automated copy-trading.
-- **Natural Language Execution:** No code, no complex UIs. Type `"Buy SOL under $140, sell at $165"` and the AI handles parsing, commitment, and execution.
-- **MEV-Proof by Design:** Strategies are committed as hashed private state on Midnight. Front-runners see nothing. Proof servers verify everything.
-- **Lace Wallet Integration:** Native connection to Midnight's ecosystem via the Lace browser extension on the `undeployed` network.
+| Feature | Description |
+|---|---|
+| **ZK Fidelity Proofs** | Every trade generates cryptographic proof of strategy adherence. No trust needed. |
+| **Selective Disclosure** | Whale traders monetize alpha via tiered access (asset → direction → full intent). |
+| **Natural Language Trading** | Type plain English. AI parses, commits, and executes privately. |
+| **MEV-Proof by Design** | Strategies committed as hashed private state. Front-runners see nothing. |
+| **Lace Wallet Integration** | Native Midnight wallet connection via browser extension. |
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
-
 ```bash
+# 1. Install dependencies
 npm install
-```
 
-### 2. Start Proof Server (keep running in background)
-
-```bash
+# 2. Start proof server
 npm run proof-server:up
-# OR: docker compose up -d
-```
 
-### 3. Compile the Smart Contract
-
-```bash
+# 3. Compile smart contract (requires compactc via WSL)
 npm run compile-contract
-# Expected: "Compiling circuits: submitVibe, executeTrade, proveFairness, provePerformance"
-```
 
-### 4. Deploy to Midnight Preprod
-
-```bash
+# 4. Deploy to Preprod
 npm run deploy:preprod
-```
+# First run: fund wallet via faucet.preprod.midnight.network
 
-> **First run:** A wallet address is generated. You must fund it:
-> 1. Copy your wallet address from the terminal output
-> 2. Go to https://faucet.preprod.midnight.network/ → request tNIGHT
-> 3. Go to https://dust.preprod.midnight.network/ → convert tNIGHT to tDUST
-> 4. Press ENTER in the terminal to continue deployment
-
-### 5. Test via CLI
-
-```bash
+# 5. Test contract via CLI
 npm run cli
-```
 
-### 6. Launch Frontend
-
-```bash
+# 6. Launch frontend
 npm run dev
-# Open http://localhost:3000
+# → http://localhost:3000
 ```
+
+See [DEPLOY.md](./DEPLOY.md) for detailed instructions including faucet funding.
 
 ---
 
-## 🌐 Live Deliverables
+## 🌐 Deliverables
 
-| Deliverable | Link |
+| Deliverable | Path |
 |---|---|
-| **Frontend Dashboard** | `http://localhost:3000` |
-| **Compact Contract** | [`contracts/src/vibe-trader.compact`](./contracts/src/vibe-trader.compact) |
-| **Deploy Script** | [`src/deploy.ts`](./src/deploy.ts) |
-| **CLI Tool** | [`src/cli.ts`](./src/cli.ts) |
-| **AI Agent** | [`agent/vibe-agent.ts`](./agent/vibe-agent.ts) |
+| Smart Contract | [`contracts/src/vibe-trader.compact`](./contracts/src/vibe-trader.compact) |
+| AI Agent | [`agent/vibe-agent.ts`](./agent/vibe-agent.ts) |
+| Deploy Script | [`src/deploy.ts`](./src/deploy.ts) |
+| CLI Tool | [`src/cli.ts`](./src/cli.ts) |
+| SDK Integration | [`lib/midnight.ts`](./lib/midnight.ts) |
+| Landing Page | [`pages/index.tsx`](./pages/index.tsx) |
+| Terminal Dashboard | [`pages/dashboard.tsx`](./pages/dashboard.tsx) |
 
-### Smart Contract Circuits
+### Contract Circuits
 
 | Circuit | Purpose |
 |---|---|
-| `submitVibe` | Commits a private trading strategy to the ledger |
-| `executeTrade` | Executes trade with ZK fidelity verification |
+| `submitVibe` | Commit a private trading strategy to the ledger |
+| `executeTrade` | Execute with ZK fidelity score verification |
 | `proveFairness` | Selective disclosure of trade details by tier |
-| `provePerformance` | Publicly reveals reputation score without exposing strategy |
-
----
-
-## 🔧 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **Smart Contracts** | Compact v0.30.0 (pragma ≥ 0.22) |
-| **Runtime** | Midnight Network (Preprod) |
-| **SDK** | Midnight.js v4.0.4 |
-| **Proof Server** | midnightntwrk/proof-server:8.0.3 |
-| **AI Agent** | Llama 3.1 405B via AI/ML API |
-| **Frontend** | Next.js 14, TailwindCSS, Framer Motion |
-| **Wallet** | Lace Extension (Undeployed Network) |
+| `provePerformance` | Publicly reveal reputation without exposing strategy |
 
 ---
 
@@ -146,25 +132,50 @@ npm run dev
 
 ```
 zkwhale/
+├── agent/                        # AI strategy parsing
+│   ├── vibe-agent.ts             #   Llama 3.1 intent parser
+│   └── prompts.ts                #   System prompts
 ├── contracts/
 │   └── src/
-│       └── vibe-trader.compact       # ZK smart contract (Compact v0.30)
-├── agent/
-│   ├── vibe-agent.ts                 # AI strategy parser (Llama 3.1)
-│   └── prompts.ts                    # System prompts for intent parsing
-├── src/
-│   ├── deploy.ts                     # Preprod deployment script
-│   └── cli.ts                        # Interactive contract testing CLI
-├── pages/
-│   ├── index.tsx                     # Landing page
-│   └── dashboard.tsx                 # Terminal + ZK proof UI
-├── components/                       # UI components
-├── frontend/lib/
-│   └── midnight.ts                   # Midnight SDK integration
-├── docker-compose.yml                # Local proof server
-├── DEPLOY.md                         # Step-by-step deployment guide
-└── .env.example                      # Environment template
+│       └── vibe-trader.compact   # ZK smart contract (Compact v0.30)
+├── src/                          # Backend scripts
+│   ├── deploy.ts                 #   Preprod deployment
+│   └── cli.ts                    #   Interactive testing CLI
+├── pages/                        # Next.js frontend
+│   ├── index.tsx                 #   Landing page
+│   ├── dashboard.tsx             #   Terminal + ZK proof UI
+│   ├── _app.tsx                  #   App wrapper
+│   └── _document.tsx             #   HTML document
+├── components/                   # Reusable UI components
+├── lib/
+│   └── midnight.ts               # Midnight SDK bridge
+├── styles/
+│   └── globals.css               # Design system
+├── docs/
+│   ├── DEMO_SCRIPT.md            # 2-min pitch script
+│   └── security.md               # Security checklist
+├── docker-compose.yml            # Local proof server
+├── DEPLOY.md                     # Deployment guide
+├── .env.example                  # Environment template
+├── package.json                  # Dependencies & scripts
+└── README.md                     # ← You are here
 ```
+
+---
+
+## 🔧 Tech Stack
+
+| Layer | Technology | Version |
+|---|---|---|
+| Smart Contracts | Compact | v0.30.0 (pragma ≥ 0.22) |
+| Runtime | Midnight Network | Preprod |
+| SDK | Midnight.js | v4.0.4 |
+| Proof Server | Docker | midnightntwrk/proof-server:8.0.3 |
+| AI Agent | Llama 3.1 405B | via AI/ML API |
+| Frontend | Next.js | 14 |
+| Styling | TailwindCSS | 3.4 |
+| Animations | Framer Motion | 12 |
+| Wallet | Lace Extension | Undeployed Network |
 
 ---
 
