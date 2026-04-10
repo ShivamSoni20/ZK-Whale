@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-text-primary font-sans antialiased selection:bg-cyan/30 selection:text-white;
+    background: radial-gradient(circle at 50% 50%, #0D1B2A 0%, #0A0E1A 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card backdrop-blur-xl border border-border;
+  }
+
+  .glow-cyan {
+    @apply shadow-[0_0_30px_rgba(0,212,255,0.2)];
+  }
+
+  .glow-purple {
+    @apply shadow-[0_0_30px_rgba(123,97,255,0.2)];
+  }
+
+  .animated-gradient-border {
+    position: relative;
+    border: 1px solid transparent;
+    background: linear-gradient(#0A0E1A, #0A0E1A) padding-box,
+                linear-gradient(45deg, #00D4FF, #7B61FF, #00E5A0) border-box;
+    background-clip: padding-box, border-box;
+    transition: all 0.3s ease;
+  }
+
+  .animated-gradient-border:hover {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+
+  .terminal-text {
+    @apply font-mono text-sm leading-relaxed;
+  }
+
+  .hero-grid {
+    background-image: linear-gradient(to right, rgba(30, 58, 95, 0.2) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(30, 58, 95, 0.2) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(circle at center, black, transparent 80%);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0E1A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E3A5F;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00D4FF;
+}
