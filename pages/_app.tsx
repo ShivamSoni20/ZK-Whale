@@ -4,10 +4,11 @@ import Head from 'next/head';
 
 import { DemoBanner } from '../components/DemoBanner';
 import { NetworkStatus } from '../components/NetworkStatus';
+import { WalletProvider } from '../contexts/WalletContext';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <WalletProvider>
       <Head>
         <title>ZKWHALE | ZK-Powered AI Trading Terminal</title>
         <meta name="description" content="The world's first ZK-powered natural language trading terminal on Midnight Network." />
@@ -18,6 +19,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </div>
       <NetworkStatus />
-    </>
+    </WalletProvider>
   );
 }

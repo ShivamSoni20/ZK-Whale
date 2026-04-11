@@ -1,9 +1,9 @@
-import React from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Zap } from 'lucide-react';
+import { useWallet } from '../contexts/WalletContext';
+import { Wallet } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
+  const { isConnected, isConnecting, connect, address } = useWallet();
+
   return (
     <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-background/50 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -30,6 +30,21 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-4">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={connect}
+            disabled={isConnecting}
+            className={`px-4 py-2 rounded-xl flex items-center gap-2 font-bold text-[10px] uppercase tracking-widest border transition-all ${
+              isConnected 
+              ? 'border-success/30 bg-success/10 text-success' 
+              : 'border-cyan/30 bg-cyan/10 text-cyan'
+            }`}
+          >
+            <Wallet size={14} />
+            {isConnecting ? 'Connecting...' : isConnected ? address?.slice(0, 8) + '...' : 'Connect Wallet'}
+          </motion.button>
+
           <Link href="/dashboard">
             <motion.button 
               whileHover={{ scale: 1.05 }}

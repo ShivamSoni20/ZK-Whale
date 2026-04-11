@@ -1,14 +1,10 @@
 import React from 'react';
 import { Wallet, ChevronDown, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useWallet } from '../contexts/WalletContext';
 
-interface WalletStatusProps {
-  address?: string;
-  balance?: string;
-  isConnected: boolean;
-}
-
-export const WalletStatus: React.FC<WalletStatusProps> = ({ address, balance, isConnected }) => {
+export const WalletStatus: React.FC = () => {
+  const { address, balance, isConnected, isConnecting, connect } = useWallet();
   return (
     <div className="flex flex-col gap-6 p-5 glass-card rounded-2xl border-border/40 shadow-xl">
       <div className="flex items-center justify-between">
@@ -69,8 +65,12 @@ export const WalletStatus: React.FC<WalletStatusProps> = ({ address, balance, is
           </div>
         </div>
       ) : (
-        <button className="w-full py-3 rounded-xl bg-cyan text-background font-bold text-sm hover:glow-cyan transition-all active:scale-[0.98]">
-          Connect Midnight Wallet
+        <button 
+          onClick={connect}
+          disabled={isConnecting}
+          className="w-full py-3 rounded-xl bg-cyan text-background font-bold text-sm hover:glow-cyan transition-all active:scale-[0.98] disabled:opacity-50"
+        >
+          {isConnecting ? 'Connecting...' : 'Connect Midnight Wallet'}
         </button>
       )}
     </div>

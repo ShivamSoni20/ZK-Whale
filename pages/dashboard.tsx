@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import { useWallet } from '../contexts/WalletContext';
 import { Navbar } from '../components/Navbar';
 import { WalletStatus } from '../components/WalletStatus';
 import { TerminalInput } from '../components/TerminalInput';
@@ -39,7 +40,9 @@ export interface ProofStep {
   icon: React.ReactNode;
 }
 
+
 export default function Dashboard() {
+  const { isConnected, connect } = useWallet();
   const [messages, setMessages] = useState<Message[]>([
     { 
       id: 1, 
@@ -68,6 +71,17 @@ export default function Dashboard() {
     const newUserMsg: Message = { id: Date.now(), type: 'user', content: vibe, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
     setMessages(prev => [...prev, newUserMsg]);
     setIsProcessing(true);
+    
+    if (!isConnected) {
+      setMessages(prev => [...prev, { 
+        id: Date.now() + 1, 
+        type: 'ai', 
+        content: '⚠️ Please connect your Midnight wallet to execute this strategy.', 
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+      }]);
+      setIsProcessing(false);
+      return;
+    }
     
     // Reset steps
     setProofSteps(prev => prev.map(s => ({ ...s, status: 'pending' })));
@@ -122,11 +136,7 @@ export default function Dashboard() {
           
           {/* Left Sidebar */}
           <div className="lg:col-span-3 flex flex-col gap-6">
-            <WalletStatus 
-              isConnected={true} 
-              address="0x8f2c...3d9e" 
-              balance="1,240.42" 
-            />
+            <WalletStatus />
             
             <div className="glass-card rounded-2xl p-5 flex flex-col gap-4">
               <h4 className="text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] flex items-center gap-2">

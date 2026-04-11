@@ -5,10 +5,12 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { VibeLeaderboard } from '../components/VibeLeaderboard';
 import { ProofBadge } from '../components/ProofBadge';
-import { Shield, Zap, Lock, MessageSquare, Cpu, CircleCheck, CircleX, ArrowRight, Globe } from 'lucide-react';
+import { Shield, Zap, Lock, MessageSquare, Cpu, CircleCheck, CircleX, ArrowRight, Globe, Wallet } from 'lucide-react';
 import Link from 'next/link';
+import { useWallet } from '../contexts/WalletContext';
 
 export default function Home() {
+  const { isConnected, connect, address } = useWallet();
   return (
     <div className="min-h-screen flex flex-col selection:bg-cyan/30">
       <Navbar />
@@ -51,6 +53,19 @@ export default function Home() {
                     <ArrowRight size={18} />
                   </motion.button>
                 </Link>
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={connect}
+                  className={`px-8 py-4 rounded-2xl border font-black text-sm uppercase tracking-widest backdrop-blur-md transition-all flex items-center gap-3 ${
+                    isConnected 
+                    ? 'bg-success/10 border-success/30 text-success glow-success' 
+                    : 'bg-cyan/10 border-cyan/30 text-cyan hover:glow-cyan'
+                  }`}
+                >
+                  <Wallet size={18} />
+                  {isConnected ? address?.slice(0, 10) + '...' : 'Connect Wallet'}
+                </motion.button>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
