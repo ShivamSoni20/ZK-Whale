@@ -1,5 +1,8 @@
+import React from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Zap, Wallet } from 'lucide-react';
 import { useWallet } from '../contexts/WalletContext';
-import { Wallet } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { isConnected, isConnecting, connect, address } = useWallet();
